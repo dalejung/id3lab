@@ -44,7 +44,7 @@ class ID3Lab(tslab.Lab):
         out = js.format(station_text)
 
         link = self.link().data
-        out += 'elemenet.append("<br />");' + link
+        out += 'element.append("<br />");' + link
         return out
 
     @property
