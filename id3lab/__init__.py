@@ -6,6 +6,13 @@ import ipycli.standalone as sa
 from workbench import sharedx
 
 class ID3Lab(tslab.Lab):
+    _html_obj = None
+    def __init__(self, draw=False, html_obj=None):
+        super(ID3Lab, self).__init__(draw=draw)
+        if html_obj is None:
+            html_obj = sharedx
+        self._html_obj = html_obj
+
     def get_varname(self):
         """
         Try to get the variable that this lab is
@@ -23,7 +30,7 @@ class ID3Lab(tslab.Lab):
     def _repr_javascript_(self):
         """
         Output:
-            
+
         stations:
         AAPL
         IBM
@@ -31,11 +38,11 @@ class ID3Lab(tslab.Lab):
         <link>
 
         Note:
-            Uses Javascript because sa.link() returns javascript. This is 
+            Uses Javascript because sa.link() returns javascript. This is
             because sa.link needs to use the location.href to get the notebook_id
             since we cannot grab that from within the notebook kernel.
         """
-        js = """ 
+        js = """
         element.append('{0}');
         container.show();
         """
@@ -49,8 +56,7 @@ class ID3Lab(tslab.Lab):
 
     @property
     def html_obj(self):
-        # for now default to sharedx
-        return sharedx
+        return self._html_obj
 
     def __str__(self):
-        return 
+        return
