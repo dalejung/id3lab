@@ -49,7 +49,12 @@ function main(out) {
     .index(stations[keys[0]].index);
 
   focus(focus_svg);
-  focus.layer(Line().data(fig.layers[0].data().close), 'focus');
+  var focus_data = fig.layers[0].data();
+  if(focus_data.close) {
+    // handle OHLC
+    focus_data = focus_data.close;
+  }
+  focus.layer(Line().data(focus_data), 'focus');
   focus.axes_x({orient:'bottom'});
   focus.grid();
 
