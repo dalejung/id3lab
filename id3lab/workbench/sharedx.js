@@ -11,10 +11,21 @@ var Layer = id3.Layer;
 var Legend = id3.Legend;
 var lab = id3.lab;
 
-var notebook_id = window.location.pathname.split('/')[2];
+var parts = window.location.pathname.split('/');
+var path = [];
+var notebook_name = '';
+for(var i=2; i < parts.length; i++) {
+    var bit = parts[i];
+    if (bit.indexOf('.ipynb') == bit.length - 6) {
+        notebook_name = bit;
+        break;
+    }
+    path.push(bit);
+}
+notebook_path = path.join('/');
 var base_url = window.location.origin;
 
-lab.kernel_execute(base_url, notebook_id, main);
+lab.kernel_execute(base_url, notebook_path, notebook_name, main);
 
 // runs in globa scope
 function main(out) {

@@ -1,7 +1,7 @@
 import IPython
 
 import ts_charting.lab.lab as tslab
-import ipycli.standalone as sa
+import nbx.handlers.standalone as sa
 
 from workbench import sharedx
 
@@ -24,8 +24,7 @@ class ID3Lab(tslab.Lab):
                 return k
 
     def link(self):
-        name = self.get_varname()
-        return sa.link(name)
+        return sa.autolink(self)
 
     def _repr_javascript_(self):
         """

@@ -1,4 +1,4 @@
-from ipycli.standalone import DirectoryHtml
+from nbx.handlers.standalone import DirectoryHtml
 import os.path
 
 def curpath():
