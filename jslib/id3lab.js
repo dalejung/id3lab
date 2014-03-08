@@ -18258,12 +18258,12 @@ var defer_output = function (msg, context, deferred) {
   var content = msg.content;
   var metadata = content.metadata;
   var data = new IPythonOutput(msg_type, content, metadata, context);
-  console.log('output');
   deferred.resolve(data);
 }
 
 var defer_status = function(msg, context, deferred) {
-    console.log('status');
+    // if status == idle, close out deferred since this is 
+    // last message
     var state = deferred.promise.inspect()['state'];
     var is_idle = msg['content']['execution_state'] == 'idle'
     if(is_idle && state == 'pending') {
@@ -18272,7 +18272,6 @@ var defer_status = function(msg, context, deferred) {
 }
 
 var defer_exec_reply = function (msg, context, _deferred) {
-  console.log('exec');
 }
 
 var defer_wrap = function (func, ctx, _deferred) {
@@ -18335,8 +18334,6 @@ var Kernel = function(base_url, model, config) {
   this.kernel_ready = false;
   this.command_buffer = [];
   this.callback_reg = {};
-
-  this.setup_iopub();
 
   // browserify won't import sync
   if (sync) {
@@ -18434,28 +18431,6 @@ Kernel.prototype.pull = function(name) {
 Kernel.prototype.__repr__ = function() {
   return ' Bridge \nbase_url='+this.base_url+"\nnotebook="+this.model;
 }
-
-Kernel.prototype.setup_iopub = function() {
-  // Kernel events
-  var $ = IPython.$;
-  var self = this;
-  $([IPython.events]).on('status_idle.Kernel',function (event, msg_id) {
-    console.log('status idle', msg_id);
-    var deferred = self.callback_reg[msg_id];
-    if(!deferred) {
-      // this kernel did not send this msg
-      return;
-    }
-    var state = deferred.promise.inspect()['state'];
-    if (state == 'pending') {
-      deferred.resolve();
-    }
-    // for debug purposes keeping this around for now
-    //delete self.callback_reg[msg_id]
-  });
-  $([IPython.events]).on('status_busy.Kernel',function () {
-  });
-};
 
 module.exports = Kernel;
 
