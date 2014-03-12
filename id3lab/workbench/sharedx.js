@@ -11,21 +11,28 @@ var Layer = id3.Layer;
 var Legend = id3.Legend;
 var lab = id3.lab;
 
-var parts = window.location.pathname.split('/');
-var path = [];
-var notebook_name = '';
-for(var i=2; i < parts.length; i++) {
-    var bit = parts[i];
-    if (bit.indexOf('.ipynb') == bit.length - 6) {
-        notebook_name = bit;
-        break;
+function get_notebook_model(pathname) {
+    var parts = pathname.split('/');
+    var path = [];
+    var notebook_name = '';
+    for(var i=2; i < parts.length; i++) {
+        var bit = parts[i];
+        if (bit.indexOf('.ipynb') == bit.length - 6) {
+            notebook_name = bit;
+            break;
+        }
+        path.push(bit);
     }
-    path.push(bit);
+    notebook_path = path.join('/');
+    notebook_path = notebook_path.split('/').map(decodeURIComponent).join('/')
+    notebook_name = notebook_name.split('/').map(decodeURIComponent).join('/')
+    return {'path':notebook_path, 'name':notebook_name}
 }
-notebook_path = path.join('/');
+
+var notebook_model = get_notebook_model(window.location.pathname);
 var base_url = window.location.origin;
 
-lab.kernel_execute(base_url, notebook_path, notebook_name, main);
+lab.kernel_execute(base_url, notebook_model.path, notebook_model.name, main);
 
 // runs in globa scope
 function main(out) {
