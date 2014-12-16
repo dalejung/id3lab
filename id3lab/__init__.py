@@ -3,7 +3,7 @@ import IPython
 import ts_charting.lab.lab as tslab
 import nbx.handlers.standalone as sa
 
-from workbench import sharedx
+from .workbench import sharedx
 
 class ID3Lab(tslab.Lab):
     _html_obj = None
@@ -19,7 +19,7 @@ class ID3Lab(tslab.Lab):
         bound to in the IPython kernel
         """
         inst = IPython.InteractiveShell._instance
-        for k,v in inst.user_ns.iteritems():
+        for k,v in inst.user_ns.items():
             if v is self and not k.startswith('_'):
                 return k
 
@@ -46,7 +46,7 @@ class ID3Lab(tslab.Lab):
         container.show();
         """
         station_text = '<strong>stations:</strong> <br />'
-        station_text += '<br />'.join(self.stations.keys())
+        station_text += '<br />'.join(list(self.stations.keys()))
         out = js.format(station_text)
 
         link = self.link().data
